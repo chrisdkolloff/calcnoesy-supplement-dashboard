@@ -1,0 +1,12 @@
+name: calcnoesy-supplement-dashboard
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pyemma
+  - dash
+  - dash-core-components
+  - pandas
+  - dash-html-components
+prefix: /Users/chris-mbp/miniconda3/envs/cns-test

@@ -8,3 +8,13 @@ $ cd ../lorem
 $ npm install
 $ npm start
 ```
+
+## Dependencies
+```
+python=3.8
+pyemma
+dash
+dash-core-components
+dash-html-components
+pandas
+```
