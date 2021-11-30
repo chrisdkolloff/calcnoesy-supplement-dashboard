@@ -12,24 +12,17 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-from plotly.graph_objs import Line, Scatter, Layout, Figure, Data, Stream, YAxis, Marker, Histogram
+from plotly.graph_objs import Scatter, Figure
 
-from utils import hmm_estimation as hmmest
-import pyemma
+from utils import sqlite_utils as sql
 
 ROOTDIR = Path(__file__).parent
-
-
-from pages import index
-
-from utils.mdclustering import MethylClustering
-from utils import sqlite_utils as sql
 
 
 def get_sim_names():
     _table_names = sql.fetch_table_names(db)
     _table_names = list(set([table.split('__')[0] for table in _table_names]))
-    return [sim for sim in _table_names if 'PDB' not in sim]
+    return [sim for sim in _table_names]
 
 
 def get_file_dir(filename):
@@ -58,22 +51,25 @@ app.layout = html.Div([
     html.Div(id='page-content')
 ])
 
-# Page 1 callback
+
+### dependent dropdown menu
 @app.callback(
-    dash.dependencies.Output('dd-local', 'options'),
-    dash.dependencies.Input('dd-selections', 'value'))
+    Output('dd-local', 'options'),
+    Input('dd-selections', 'value'))
 def set_pair_options(selection):
     local_names = sql.fetch_column_names(db, f"{selection}__pair__PC1")
     return [{'label': i, 'value': i} for i in local_names]
 
 
 @app.callback(
-    dash.dependencies.Output('dd-local', 'value'),
-    dash.dependencies.Input('dd-local', 'options'))
+    Output('dd-local', 'value'),
+    Input('dd-local', 'options'))
 def set_pair_value(available_options):
     return available_options[0]['value']
 
+###
 
+# Page 2 callback
 @app.callback( [Output('data-tics', 'data'),
                 Output('data-metastable_traj', 'data'),
                 Output('data-its', 'data'),
@@ -149,6 +145,13 @@ def plot_metastable_assignments(tics, metastable_traj):
             ),
             text=f'State {i + 1}'
         ))
+
+    fig.update_layout(
+        xaxis=dict(
+            title="tIC1"),
+        yaxis=dict(
+            title="tIC2"),
+    )
 
     return fig
 
@@ -309,20 +312,16 @@ def display_page(pathname):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--simulations_db",
-                        default="db/tica.db",
-                        help="SQL db name")
+    parser.add_argument("db",
+                        help="path to SQL db")
 
     args = parser.parse_args()
 
-    ROOTDIR = Path(__file__).parent
-
-    db = Path(ROOTDIR, args.simulations_db)
+    db = Path(ROOTDIR, args.db)
 
     # get names of simulations in db
     sim_names = get_sim_names()
     save_file('sim_names', sim_names)
-
 
     # get resids and slow_resid pairs
     for i, sim_name in enumerate(sim_names):

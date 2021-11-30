@@ -1,7 +1,5 @@
-import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
 
 from app import get_file
 
@@ -15,9 +13,9 @@ page_1_layout = html.Div(children=[
             dcc.Dropdown(
                 id="dd-selections",
                 options=[
-                    {"label": selection, "value": selection} for selection in selections
+                    {"label": selection, "value": selection} for selection in selections if 'PDB' not in selection
                 ],
-                value=selections[0],
+                value=[selection for selection in selections if 'PDB' not in selection][0],
                 persistence=True,
                 clearable=False
             ),
