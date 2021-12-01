@@ -312,7 +312,8 @@ def display_page(pathname):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("db",
+    parser.add_argument("--db",
+                        default='db/calcnoesy-supplement-data.db',
                         help="path to SQL db")
 
     args = parser.parse_args()

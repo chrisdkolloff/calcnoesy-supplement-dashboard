@@ -21,7 +21,10 @@ pandas
 ## Data
 Download the SQL database containing the data used in this study using the following link:
 
-``` https://data.mendeley.com/XXX ```
+``` 
+https://data.mendeley.com/XXX
+DOI: 10.17632/d9r96x4c9x.1
+```
 
 After downloading the data, move the database into `/db/`
 
@@ -29,6 +32,6 @@ After downloading the data, move the database into `/db/`
 The dashboard will run on a local server using:
 
 ```
-python app.py ./db/tica.db
+python app.py
 ```
 
