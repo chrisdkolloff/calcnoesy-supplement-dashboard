@@ -1,12 +1,19 @@
 # Supplementary Material: Effect of supra-τc conformational exchange on the NOESY build-up of large proteins
 
 ## Setup
-After cloning the repository, create a new environment that will install the necessary dependencies using the .yml file
+After cloning the repository with
+
+```
+$ git clone git@github.com:chrisdkolloff/calcnoesy-supplement-dashboard.git
+```
+
+create a new environment that will install the necessary dependencies using the .yml file
 provided:
 
 ```
 $ conda env create -f environment.yml
 ```
+
 ### Dependencies
 Alternatively, install the following dependencies:
 ```
