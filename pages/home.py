@@ -3,7 +3,7 @@ from dash import html
 
 home_layout = html.Div([
     dcc.Markdown('''
-    # Supplementary Material: Effect of supra-\u03c4c conformational exchange on the NOESY build-up of large proteins
+    # Supplementary Material: Motional clustering in supra-\u03c4c conformational exchange influences NOE cross-relaxation rate
     ## Christopher Kolloff, Adam Mazur, Jan K. Marzinek, Peter J. Bond, Simon Olsson, and Sebastian Hiller
     ## DOI: [XXX](https://todo)
     '''),
