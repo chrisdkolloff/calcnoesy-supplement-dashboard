@@ -1,4 +1,4 @@
-# Supplementary Material: Effect of supra-τc conformational exchange on the NOESY build-up of large proteins
+# Supplementary Material: Motional clustering in supra-τc conformational exchange influences NOE cross-relaxation rate
 
 ## Setup
 After cloning the repository with
