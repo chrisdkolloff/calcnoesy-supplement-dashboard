@@ -71,7 +71,7 @@ def set_pair_value(available_options):
 
 ###
 
-# Page 2 callback
+# Page 1 callback
 @app.callback( [Output('data-tics', 'data'),
                 Output('data-metastable_traj', 'data'),
                 Output('data-its', 'data'),
@@ -299,6 +299,66 @@ def make_xpk_plot(ff_names, resid1, resid2, averaging):
 
     return fig
 
+# Page 3 callback
+@app.callback( [Output('data-tcf_full', 'data'),
+                Output('data-tcf_1', 'data'),
+                Output('data-tcf_2', 'data'),
+                ],
+               [Input("dd-selections", "value"),
+                Input("dd-local", "value"),
+                ])
+def get_data(selection, methyl_pair):
+    resid1, resid2 = [int(rs.split('_')[1]) for rs in methyl_pair.split('__')]
+    print(resid1, resid2)
+    data = sql.fetch_table_where2(db, f'{selection}__tcf', 'resid1', resid1, 'resid2',
+                                  resid2)
+
+    tcf_full = data.tcf_full.to_numpy()[0]
+    tcf_1 = data.tcf_1.to_numpy()[0]
+    tcf_2 = data.tcf_2.to_numpy()[0]
+    return [tcf_full, tcf_1, tcf_2]
+
+
+@app.callback(
+    dash.dependencies.Output("plot-tcf", "figure"),
+    [Input("data-tcf_full", "data"),
+     Input("data-tcf_1", "data"),
+     Input("data-tcf_2", "data"),
+     ])
+def plot_tcfs(tcf_full, tcf_1, tcf_2):
+    fig = Figure()
+
+    data = [tcf_full, tcf_1, tcf_2]
+    labels = ['Full trajectory',
+              'State 1',
+              'State 2']
+
+    for i in range(3):
+        tau = list(range(1, len(data[i]) + 1))
+        fig.add_trace(Scatter(
+            x=tau,
+            y=data[i],
+            xaxis="x",
+            yaxis="y",
+            name=labels[i],
+            mode="lines",
+            marker=dict(
+            #     size=4,
+                color=ms_colors[i]
+            ),
+            text=labels[i]
+        ))
+
+    fig.update_layout(
+        xaxis=dict(
+            title="tau [ns]"),
+        yaxis=dict(
+            title="Time correlation"),
+        yaxis_range=[0, 1]
+    )
+
+    return fig
+
 # Index Page callback
 @app.callback(Output('page-content', 'children'),
               [Input('url', 'pathname')])
@@ -307,6 +367,8 @@ def display_page(pathname):
         return page_2.page_2_layout
     elif pathname == '/page-1':
         return page_1.page_1_layout
+    elif pathname == '/page-3':
+        return page_3.page_1_layout
     else:
         return home.home_layout
 
@@ -331,7 +393,7 @@ if __name__ == '__main__':
         if sql.is_table(db, f"{sim_name}__pair__PC1"):
             resids = sorted(set(sql.fetch_column(db, f'{sim_name}__calcnoesy', 'resid1').resid1))
             save_file('resids', resids)
-            slow_pairs = sql.fetch_column_names(db, f"{sim_name}__pair__PC1")
+            slow_pairs = sql.fetch_column_names(db, f"{sim_name}__slow")
             save_file('slow_pairs', slow_pairs)
             break
 
@@ -341,6 +403,7 @@ if __name__ == '__main__':
     # import pages
     from pages import page_1
     from pages import page_2
+    from pages import page_3
     from pages import home
 
     try:
