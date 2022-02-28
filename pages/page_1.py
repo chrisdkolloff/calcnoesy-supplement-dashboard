@@ -80,5 +80,7 @@ page_1_layout = html.Div(children=[
     html.Br(),
     dcc.Link('Go to Page 2', href='/page-2'),
     html.Br(),
+    dcc.Link('Go to Page 3', href='/page-3'),
+    html.Br(),
     dcc.Link('Go back to home', href='/home-content')
 ])

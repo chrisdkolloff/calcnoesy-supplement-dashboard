@@ -10,7 +10,7 @@ home_layout = html.Div([
     html.Br(),
     dcc.Markdown('''
     ### This dashboard contains correlation functions, ITS and tICA plots as well as NOESY build-up curves for all local systems in all force fields that are in supra-\u03c4c exchange (up to 10 A distance) are provided. In addition, all other methyl--methyl contacts of up to 5 A are also provided. 
-    [Page 1](/page-1) contains the ITS and tICA plots of the systems, on [page 2](/page-2), you will find all NOESY build-up curves between methyl groups calculated for the respective force fields, and [page 3](/page-3) contains the correlation functions of the local systems. 
+    ### [Page 1](/page-1) contains the ITS and tICA plots of the systems, on [page 2](/page-2), you will find all NOESY build-up curves between methyl groups calculated for the respective force fields, and [page 3](/page-3) contains the correlation functions of the local systems. 
     
     ### For questions or remarks, please reach out to [Christopher Kolloff](mailto:chrisdkolloff@gmail.com) or [Sebastian Hiller](mailto:sebastian.hiller@unibas.ch).
     '''),
