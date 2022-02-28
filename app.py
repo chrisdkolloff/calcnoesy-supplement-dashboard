@@ -87,13 +87,17 @@ def get_data(selection, methyl_pair, time, traj_length):
     PC1s_local = pd.read_sql_query(f"""SELECT {methyl_pair} FROM {selection}__pair__PC1""", connection)
     PC2s_local = pd.read_sql_query(f"""SELECT {methyl_pair} FROM {selection}__pair__PC2""", connection)
 
-    its = pd.read_sql_query(f"""SELECT {methyl_pair} FROM {selection}__its""", connection)
+    if methyl_pair.split('__')[-1] == 'fast':
+        its = pd.read_sql_query(f"""SELECT {methyl_pair} FROM {selection}__its_fast""", connection)
+        metastable_traj = np.zeros(len(PC1s_local))
+    else:
+        its = pd.read_sql_query(f"""SELECT {methyl_pair} FROM {selection}__its""", connection)
+        metastable_traj = pd.read_sql_query(f"""SELECT {methyl_pair} FROM {selection}__labels""", connection)
+        metastable_traj = metastable_traj[methyl_pair]
+        metastable_traj = metastable_traj.to_numpy()
+
     its = its[methyl_pair]
     its = its.to_numpy()
-
-    metastable_traj = pd.read_sql_query(f"""SELECT {methyl_pair} FROM {selection}__labels""", connection)
-    metastable_traj = metastable_traj[methyl_pair]
-    metastable_traj = metastable_traj.to_numpy()
 
     connection.close()
 
@@ -308,14 +312,17 @@ def make_xpk_plot(ff_names, resid1, resid2, averaging):
                 Input("dd-local", "value"),
                 ])
 def get_data(selection, methyl_pair):
-    resid1, resid2 = [int(rs.split('_')[1]) for rs in methyl_pair.split('__')]
-    print(resid1, resid2)
+    resid1, resid2 = [int(rs.split('_')[1]) for rs in methyl_pair.split('__')[:2]]
     data = sql.fetch_table_where2(db, f'{selection}__tcf', 'resid1', resid1, 'resid2',
                                   resid2)
 
     tcf_full = data.tcf_full.to_numpy()[0]
-    tcf_1 = data.tcf_1.to_numpy()[0]
-    tcf_2 = data.tcf_2.to_numpy()[0]
+    if methyl_pair.split('__')[-1] == 'fast':
+        tcf_1 = np.array([])
+        tcf_2 = np.array([])
+    else:
+        tcf_1 = data.tcf_1.to_numpy()[0]
+        tcf_2 = data.tcf_2.to_numpy()[0]
     return [tcf_full, tcf_1, tcf_2]
 
 
