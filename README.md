@@ -29,8 +29,8 @@ pandas
 Download the SQL database containing the data used in this study using the following link:
 
 ``` 
-https://data.mendeley.com/datasets/d9r96x4c9x/1
-DOI: 10.17632/d9r96x4c9x.1
+https://data.mendeley.com/datasets/d9r96x4c9x/3
+DOI: 10.17632/d9r96x4c9x.3
 ```
 
 After downloading the data, move the database into `/db/`
